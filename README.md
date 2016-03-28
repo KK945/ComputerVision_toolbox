@@ -57,4 +57,4 @@ ex  img = imread("jellyfish.JPG", CV_LOAD_IMAGE_UNCHANGED); here replace the jel
 
 4. finally to start debugging press F5
 
-5. you could use the same project to execute both the codes by first copying code of oscarselfie and performing step 26, 27, 28 and then after erasing the previous code copying the code for jellyfish and doing the same
+5. you could use the same project to execute both the codes by first copying code of oscarselfie and then after erasing the previous code copying the code for jellyfish and doing the same
