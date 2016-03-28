@@ -2,27 +2,27 @@
 ##To execute the code:
 ####Setup
 1. make an opencv (2.4.9) project in visual studio c++ 2010
-2. 
+ 
 2. so open visual studio then click on file->new project-> visual c++ -> win 32 console application
-3. 
+ 
 3. give a name and loacation to the project and click ok
-4. 
+ 
 4. in the next box you see tick empty project and finish
-5. 
+ 
 5. then ctrl+shift+A and click on c++ file, name it as main.cpp and go ahead
-6. 
+ 
 6. Make sure that "Debug" is selected in the solution configuration combobox
-6. 
+ 
 7. then in the solution explorer window right click on the project name and go to its property
-7. 
+ 
 8. go to VC++ directories
-8. 
+ 
 9. Select Include Directories to add a new entry and type C:\opencv\build\include.
-9. 
+ 
 10. Click Ok to close the dialog.Back to the Property dialog, select Library Directories to add a new entry and type     C:\opencv\build\x86\vc10\lib.
-10. 
+ 
 11. Click Ok to close the dialog.
-12. 
+ 
 12. Back to the property dialog, select Linker → Input → Additional Dependencies to add new entries. On the popup dialog, type the files below
 
 opencv_core249d.lib 
