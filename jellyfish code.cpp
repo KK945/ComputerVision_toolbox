@@ -77,14 +77,14 @@ Point center = Point((bounding_rect.x + bounding_rect.width/2), (bounding_rect.y
 cout<<"Rectangle " <<i<< " Centroid position is at: " << center.x << " " << center.y << endl;
 //mark red cross at centroid by making two intersecting lines at centroid
 line( drawing,
-        Point( center.x, center.y +3),
-        Point(center.x, center.y - 3),
+        Point( center.x -3, center.y +3),
+        Point(center.x +3, center.y - 3),
        Scalar( 0, 0, 255 ),
         2,
         8 );
 line( drawing,
-        Point( center.x +3, center.y),
-        Point(center.x - 3, center.y),
+        Point( center.x +3, center.y +3),
+        Point(center.x - 3, center.y-3),
        Scalar( 0, 0, 255 ),
         2,
         8 );
