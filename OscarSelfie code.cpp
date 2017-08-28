@@ -1,97 +1,83 @@
+/* Name: Karthika Kamath
+   College: VEERMATA JIJABAI TECHNOLOGICAL INSTITUTE (VJTI)
+   Third Year Btech Electronics */
+
+/*sources: http://opencvexamples.blogspot.com/p/learning-opencv-functions-step-by-step.html */
+
+
+#include "opencv2/objdetect/objdetect.hpp" //for facial feature extraction using haarcascades
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+ 
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 
-using namespace cv;
+ 
 using namespace std;
-
-Mat img; Mat img_gray;
-int thresh = 100;
-int max_thresh = 255;
-
-
-/// Function header
-void thresh_callback(int, void* );
-
-int main( int, char** argv )
+using namespace cv;
+ 
+int main( )
 {
-  /// Load source image and convert it to gray
-  img = imread("jellyfish.JPG", CV_LOAD_IMAGE_UNCHANGED);
+   
+	Mat image;
+// load image and create a window to display
+    image = imread("oscarSelfie.jpg", CV_LOAD_IMAGE_COLOR);  
+    namedWindow( "window1", 1 );  
+	imshow( "window1", image );
+ 
+    // Load Face cascade (.xml file)
+    CascadeClassifier face_cascade, eyes_cascade;
+    face_cascade.load( "C:/opencv/sources/data/haarcascades/haarcascade_frontalface_alt2.xml" );
+	eyes_cascade.load("C:/opencv/sources/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml" );
+    
 
-  /// Convert image to gray and blur it
-  cvtColor( img, img_gray, COLOR_BGR2GRAY );
-  blur( img_gray, img_gray, Size(3,3) );
+  
+    Mat grayImage;
+    cvtColor(image, grayImage, CV_BGR2GRAY); //color to gray
+    equalizeHist(grayImage, grayImage);// histogram equilisation
 
-  /// Create Window
-  const char* image_window = "Image";
-  namedWindow( image_window, WINDOW_AUTOSIZE );
-  imshow( image_window, img );
-// taskbar created to adjust threshold to detect accordingly
-  createTrackbar( " Threshold:", "Image", &thresh, max_thresh, thresh_callback );
-  thresh_callback( 0, 0 );
+    // detect the faces on the image
+    vector<Rect> faces;
+    face_cascade.detectMultiScale(grayImage, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(90,90));
 
-  waitKey(0);
-  return(0);
+    for (int i = 0; i < faces.size(); i++)
+	{
+        // visualize the faces
+        Point pt1(faces[i].x + faces[i].width, faces[i].y + faces[i].height);
+        Point pt2(faces[i].x, faces[i].y);
+        rectangle(image, pt1, pt2, cvScalar(0, 255, 0, 0), 1, 8 ,0);
+        // detect the eyes within the facial roi
+        Rect rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+        Mat roi = grayImage(rect);
+        vector<Rect> eyes;
+       // in each face detect eyes
+        eyes_cascade.detectMultiScale(roi, eyes, 1.1, 2,0|CV_HAAR_SCALE_IMAGE , Size(30, 30));
+		
+        //since at i=3 Ellen’s face is being detected as it is the 4th face detected starting from left to right
+
+		if (i==3)
+		{
+        for (int j = 0; j < eyes.size(); j++)
+		{
+            // visualize the eyes
+            Point pt1(faces[i].x + eyes[j].x + eyes[j].width, faces[i].y + eyes[j].y + eyes[j].height);
+            Point pt2(faces[i].x + eyes[j].x, faces[i].y + eyes[j].y);
+            rectangle(image, pt1, pt2, cvScalar(0, 210, 255, 0), 1, 8 ,0);
+			cout<<"dimensions and centroid of eye "<< j+1 << eyes[j]<<endl;
+		
+		//finding rgb value at the centroid of the eye	
+        int b = roi.at<Vec3b>(eyes[j].x, eyes[j].y)[0];
+        int g = roi.at<Vec3b>(eyes[j].x, eyes[j].y)[1];
+        int r = roi.at<Vec3b>(eyes[j].x, eyes[j].y)[2];
+        cout<<"rgb value of eye "<< j+1<<":" << r << " " << g << " " << b << endl ;
+        
+		}
+    }
+	}
+//show it in another window     
+    imshow( "Detected Face", image );
+     
+    waitKey(0);                   
+    return 0;
 }
 
-void thresh_callback(int, void* )
-{
-  Mat threshold_output;
-  vector<vector<Point> > contours;
-  vector<Vec4i> hierarchy;
-
-  /// Detect edges using Threshold
-  threshold( img_gray, threshold_output, thresh, 255, THRESH_BINARY );
-  /// Find contours
-  findContours( threshold_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0) );
-
-  /// Approximate contours to polygons + get bounding rects and circles
-  vector<vector<Point> > contours_poly( contours.size() );
-  vector<Rect> boundRect( contours.size() );
-  vector<Point2f>center( contours.size() );
-  vector<float>radius( contours.size() );
-
-  for( size_t i = 0; i < contours.size(); i++ )
-     { approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
-       boundRect[i] = boundingRect( Mat(contours_poly[i]) );
-       minEnclosingCircle( contours_poly[i], center[i], radius[i] );
-     }
-
-
-  /// Draw polygonal contour + bonding rects + circles
-  Mat drawing = Mat::zeros( threshold_output.size(), CV_8UC3 );
-  for( size_t i = 0; i< contours.size(); i++ )
-     {
-       
-       drawContours( drawing, contours_poly, (int)i, Scalar(0,255,255), 1, 8, vector<Vec4i>(), 0, Point() );
-       
-       circle( drawing, center[i], (int)radius[i], Scalar(255, 255, 0), 2, 8, 0 );
-	   Rect bounding_rect=boundingRect(contours[i]);
-	   rectangle(drawing, bounding_rect,  Scalar(0,255,0),2, 8,0);
-	   //Bounding Box Centroid
-Point center = Point((bounding_rect.x + bounding_rect.width/2), (bounding_rect.y + bounding_rect.height/2));
-
-// print it:
-cout<<"Rectangle " <<i<< " Centroid position is at: " << center.x << " " << center.y << endl;
-//mark red cross at centroid by making two intersecting lines at centroid
-line( drawing,
-        Point( center.x, center.y +3),
-        Point(center.x, center.y - 3),
-       Scalar( 0, 0, 255 ),
-        2,
-        8 );
-line( drawing,
-        Point( center.x +3, center.y),
-        Point(center.x - 3, center.y),
-       Scalar( 0, 0, 255 ),
-        2,
-        8 );
-  }
-
-  /// Show in a window
-  namedWindow( "Detected", WINDOW_AUTOSIZE );
-  imshow( "Detected", drawing );
-} 
 
