@@ -1,6 +1,6 @@
 # ComputerVision_toolbox
-##To execute the code:
-####Setup
+## To execute the code:
+### Setup
 1. make an opencv (2.4.9) project in visual studio c++ 2010
  
 2. so open visual studio then click on file->new project-> visual c++ -> win 32 console application
@@ -45,7 +45,7 @@ opencv_objdetect249d.lib
 
 14. Now it is ready to write and run the code using the opencv function in C++.
 
-####Execution
+### Execution
 
 1. to execute each of the program copy the code from the given source code in this repo into this created project's main.cpp separately
 
@@ -58,3 +58,5 @@ ex  img = imread("jellyfish.JPG", CV_LOAD_IMAGE_UNCHANGED); here replace the jel
 4. finally to start debugging press F5
 
 5. you could use the same project to execute both the codes by first copying code of oscarselfie and then after erasing the previous code copying the code for jellyfish and doing the same
+
+### Please find input images and the output image screenshots in the repository. 
