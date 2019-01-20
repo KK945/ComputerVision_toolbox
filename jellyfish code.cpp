@@ -2,6 +2,8 @@
    College: VEERMATA JIJABAI TECHNOLOGICAL INSTITUTE (VJTI)
    Third Year Btech Electronics */
 
+/* Problem Statement: To mark red cross at the centroid of each jellyfish in the given image */
+
 /* sources used: http://opencv-srf.blogspot.in/p/opencv-c-tutorials.html
 				 O'Reilly - Learning OpenCv book */
 
