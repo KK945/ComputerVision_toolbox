@@ -2,6 +2,8 @@
    College: VEERMATA JIJABAI TECHNOLOGICAL INSTITUTE (VJTI)
    Third Year Btech Electronics */
 
+/* Problem Statement: To find color of Ellen DeGeneres from the given image */
+
 /*sources: http://opencvexamples.blogspot.com/p/learning-opencv-functions-step-by-step.html */
 
 
